@@ -1,21 +1,33 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-const { stringify } = require("jade/lib/utils");
+//const { stringify } = require("jade/lib/utils");
 
 const userSchema = new mongoose.Schema(
   {
     name: String,
     age: Number,
-    email: String,
+    email: { type: String, unique: true },
     password: String,
+    phoneNumber: Number,
     role: {
       type: String,
-      enum: ["admin", "client"],
+      enum: ["admin", "Passenger", "Driver"],
     },
     image_user: { type: String, required: false, default: "" },
   },
   { timestamps: true }
 );
+
+const passengerSchema = new mongoose.Schema({
+  notePassager: { type: Number, default: null },
+  //historiqueReservation,
+});
+
+const driverSchema = new mongoose.Schema({
+  car: { type: mongoose.Schema.Types.ObjectId, ref: "Car" },
+  noteConduite: { type: Number, default: null },
+  //historiqueConduite,
+});
 
 userSchema.post("save", async function (req, next) {
   console.log("New user created & saved");
@@ -32,7 +44,7 @@ userSchema.pre("save", async function (next) {
   }
 });
 
-userSchema.static.login = async function (email, password) {
+userSchema.statics.login = async function (email, password) {
   const user = await this.findOne({ email: email });
   if (user) {
     const auth = await bcrypt.compare(password, user.password);
@@ -47,6 +59,10 @@ userSchema.static.login = async function (email, password) {
   throw new Error("incorrect email");
 };
 
-const User = mongoose.model("user", userSchema);
+const options = { discriminatorKey: "role" };
 
-module.exports = User;
+const User = mongoose.model("user", userSchema);
+const Passenger = User.discriminator("passenger", passengerSchema, options);
+const Driver = User.discriminator("driver", driverSchema, options);
+
+module.exports = { User, Passenger, Driver };

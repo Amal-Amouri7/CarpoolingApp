@@ -5,10 +5,12 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const http = require("http");
 const { connectToMongoDB } = require("./db/BD");
+const session = require("express-session");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var osRouter = require("./routes/os");
+var reservationRouter = require("./routes/reservation");
 
 var app = express();
 
@@ -20,9 +22,19 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use(
+  session({
+    secret: "net amal secret",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false, maxAge: 2 * 60 * 60 },
+  })
+);
+
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/os", osRouter);
+app.use("/reservation", reservationRouter);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
