@@ -171,3 +171,12 @@ module.exports.login = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+module.exports.logout =async (req,res) =>{
+  try{
+    res.cookie('this_is_jstoken', "",{httpOnly: false, maxAge: 1})
+    res.status(200).json("logout"); 
+  }catch(error){
+    res.status(500).json({ message: error.message });
+  }
+};

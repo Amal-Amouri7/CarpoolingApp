@@ -6,6 +6,7 @@ const upload = require("../Middleware/uploadFile");
 router.get("/getAllUser/", userController.getUsers);
 router.get("/getUserById/:id", userController.getUserByID);
 router.get("/login", userController.login);
+router.get("/logout", userController.logout);
 
 router.post("/addPassenger/", userController.addUserP);
 router.post("/addDriver/", userController.addUserD);
