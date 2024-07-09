@@ -24,7 +24,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use(
   session({
-    secret: "net amal secret",
+    secret: process.env.Net_Secret,
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false, maxAge: 2 * 60 * 60 },
