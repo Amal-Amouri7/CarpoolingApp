@@ -7,6 +7,11 @@ const {requireAuthUser} = require("../Middleware/authMiddleware");
 router.get("/getAllUser/",requireAuthUser, userController.getUsers);
 router.get("/getUserById/:id",requireAuthUser, userController.getUserByID);
 router.get("/getUserAuth/",requireAuthUser, userController.getUserAuth);
+router.get("/getUsers18/",requireAuthUser, userController.getUsers18);
+router.get("/getUsersByAge/:age",requireAuthUser, userController.getUsersByAge);
+router.get("/getOrderAllUsersByAge/",requireAuthUser, userController.getOrderAllUsersByAge);
+router.get('/getUserBetweenXAndY',userController.getUserBetweenXAndY );
+router.get('/searchUsersByName',requireAuthUser,userController.searchUsersByName );
 router.get("/login", userController.login);
 router.get("/logout",requireAuthUser, userController.logout);
 
@@ -17,8 +22,8 @@ router.post(
   upload.single("image_user"),
   userController.addwithImg
 );
-router.delete("/deleteUser/:id", userController.deleteUser);
-router.put("/updateUser/:id", userController.updateUser);
-router.put("/updatePassword/:id", userController.updateUserPassword);
+router.delete("/deleteUser/",requireAuthUser, userController.deleteUser);
+router.put("/updateUser/",requireAuthUser, userController.updateUser);
+router.put("/updatePassword/",requireAuthUser, userController.updateUserPassword);
 
 module.exports = router;
